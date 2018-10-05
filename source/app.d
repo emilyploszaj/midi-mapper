@@ -15,8 +15,8 @@ shared static this(){
 ///Class wrapper for thread storage hacks
 class PortMidi{
 	public bool[long] keyStates;
-	public bool webserver;
-	public WebSocket[] sockets;
+	public bool webserver, websocketConnected;
+	public Json[] messages;
 	public Json json;
 	this(){
 		File f = File("config.json");
@@ -67,7 +67,7 @@ class PortMidi{
 				foreach(Chord c; chords){
 					if(c.presses.countUntil(data1) != -1) c.check(keyStates, status == 144);
 				}
-				if(webserver) sendAll(cast(int) data1, status == 144);
+				if(webserver && websocketConnected) sendWebserver(cast(int) data1, status == 144);
 			}else Thread.sleep(dur!"msecs"(10));
 		}
 		Pm_Close(&stream);
@@ -78,24 +78,26 @@ class PortMidi{
 		else if(req.path == "/script.js") res.writeBody(import("script.js"), "text/javascript");
 	}
 	void handleWebSocket(scope WebSocket socket){
-		scope(exit) socket.close();
-		sockets ~= socket;
+		if(websocketConnected){
+			socket.close();
+			return;
+		}
+		websocketConnected = true;
+		scope(exit){
+			socket.close();
+			websocketConnected = false;
+		}
 		while(socket.waitForData()){
 			string data = socket.receiveText();
-			writeln("Web Socket: ", data);
+			while(messages.length > 0){
+				socket.send(messages[0].toString());
+				messages = messages[1..$];
+			}
 		}
-		sockets = sockets.remove(sockets.countUntil(socket));
 	}
 	///Sends a message to all connected websockets
-	void sendAll(int key, bool state){
-		try{
-			foreach(socket; sockets){
-				if(!socket.connected) continue;
-				socket.send(Json(["key": Json(key), "state": Json(state)]).toString());
-			}
-		}catch(Exception e){
-			writeln(e);
-		}
+	void sendWebserver(int key, bool state){
+		messages ~= Json(["key": Json(key), "state": Json(state)]);
 	}
 }
 ///C signal function

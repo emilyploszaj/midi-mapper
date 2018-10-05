@@ -1,11 +1,11 @@
 # midi-mapper
-midi-mapper is a windows program that binds midi inputs, or combinations of inputs, to a keyboard key. It also comes with a built in web client for viewing midi activity in the form of a standard 5 octave piano keyboard. Despite not being shown on this display, any method of midi input should work with key bindings.
+midi-mapper is a windows program that binds midi inputs, or combinations of inputs, to a keyboard key. It also comes with a built in web client for viewing midi activity in the form of a standard 5 octave piano keyboard. Note that this webserver only allows one active connection at a time, it will reject any further connections. Despite not being shown on this display, any method of midi input should work with key bindings.
 
 ## Compiling/Installation
 You can clone and build midi-mapper using dub, the standard package manager for D. This requires a D compiler, I suggest dmd.
 
 ## Settings
-The config.json file is used to control all of the settings and bindings of the program, an example is included in the repository that binds a C major chord (C4, E4, G4) to the W key. Here's a list of the settings and what they do:
+The config.json file is used to control all of the settings and bindings of the program, an example is included in the repository that I used to play Harry Potter and the Chamber of Secrets (PC) on my midi piano keyboard. Here's a list of the settings and what they do:
 * **log-midi** if the program should output the raw midi input in the format "status data1 data2".
 * **run-webserver** if the program should run a vibe.d webserver that can be connected to in order to view all midi activity.
 * **port** the port the webserver should run on. This does nothing if you've set **run-webserver** to false.

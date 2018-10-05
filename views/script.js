@@ -8,6 +8,7 @@ console.log(keys);
 socket = new WebSocket("ws://" + window.location.href.substring(7) + "ws");
 socket.onopen = function(){
 	connected = true;
+	setInterval(pingServer, 10);
 	drawPiano();
 }
 socket.onclose = function(){
@@ -19,6 +20,9 @@ socket.onmessage = function(msg){
 	var key = data.key - 36;
 	keys[key] = data.state;
 	drawPiano();
+}
+function pingServer(){
+	socket.send("ping");
 }
 function drawPiano(){
 	var ctx = document.getElementById("piano").getContext("2d");
