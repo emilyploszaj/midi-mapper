@@ -1,0 +1,14 @@
+{
+	"name": "midi-mapper",
+	"authors": [
+		"Emily"
+	],
+	"dependencies": {
+		"derelict-portmidi": ">=1.0.0-beta <1.1.0",
+		"vibe-d": "~>0.8.0-beta.5"
+	},
+	"description": "A Windows program for translating midi input into key presses.",
+	"copyright": "Copyright © 2018, Emily",
+	"license": "proprietary",
+	"versions": ["VibeDefaultMain"]
+}

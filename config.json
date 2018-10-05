@@ -1,0 +1,16 @@
+{
+	"log-midi": false,
+	"run-webserver": true,
+	"port": 8847,
+	"input-id": 2,
+	"inputs": [
+		{
+			"keycode": 87,
+			"midi": [
+				60,
+				64,
+				67
+			]
+		}
+	]
+}
